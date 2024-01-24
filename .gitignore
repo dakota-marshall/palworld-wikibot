@@ -1,0 +1,9 @@
+logs/commands.log
+*.pyc
+throttle.ctrl
+scripts/*
+data/*
+!data/.gitkeep
+apicache-py3/*
+pywikibot-BoneALisa.lwp
+.vscode/*
