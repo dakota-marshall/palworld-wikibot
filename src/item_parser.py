@@ -45,7 +45,11 @@ def get_items() -> list[dict]:
     item.weight = data['Weight']
     item.buy_price =  data['Price']
     item.sell_price = (item.buy_price / 10)
-    item.consumable = not data['bNotConsumed']
+    #item.consumable = not data['bNotConsumed']
+    if item.item_type == "Food" or item.item_type == "Consume":
+      item.consumable = not data['bNotConsumed']
+    else:
+      item.consumable = False
     item.durability = data['Durability']
     item.mag_size = data['MagazineSize']
     item.attack = data['PhysicalAttackValue']
@@ -130,6 +134,8 @@ def get_items() -> list[dict]:
 
 def make_item_table(item_list: dict) -> str:
     
+    sorted_list = sorted(item_list, key=lambda x: x['name'])
+
     table = f"""{{| class="wikitable sortable mw-collapsible"
 |+
 !Item
@@ -145,7 +151,7 @@ def make_item_table(item_list: dict) -> str:
 !Armor Def
 !Shield Value
 """
-    for item in item_list:
+    for item in sorted_list:
       entry = f"""|-
 |{{{{i|{item['name']}}}}}
 |[[{item['item_type']}]]
