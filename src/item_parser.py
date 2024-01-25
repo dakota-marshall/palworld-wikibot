@@ -119,16 +119,57 @@ def get_items() -> list[dict]:
           case "Material5_Count":
             if data != 0:
               item.recipe['mat5_count'] = data
+          case "Product_Count":
+            item.recipe['count'] = data
     except KeyError:
       print(f"No recipe for {item_name} found")
     
     item_list.append(asdict(item))
 
   return item_list
-    
-def main():
-  print(json.dumps(get_items()))
 
+def make_item_table(item_list: dict) -> str:
+    
+    table = f"""{{| class="wikitable sortable mw-collapsible"
+|+
+!Item
+!Category
+!Rarity
+!Consumable?
+!Weight
+!Durability
+!Buy Price
+!Sell Price
+!Mag Size
+!Armor HP
+!Armor Def
+!Shield Value
+"""
+    for item in item_list:
+      entry = f"""|-
+|{{{{i|{item['name']}}}}}
+|[[{item['item_type']}]]
+|{str(item['rarity'])}
+|{str(item['consumable'])}
+|{str(item['weight'])}
+|{str(item['durability'])}
+|{str(item['buy_price'])}
+|{str(item['sell_price'])}
+|{str(item['mag_size'])}
+|{str(item['armor_hp'])}
+|{str(item['armor_def'])}
+|{str(item['shield_value'])}
+"""
+      table += entry
+    
+    table += "|}\n"
+
+    return table
+
+def main():
+  
+  items = get_items()
+  print(make_item_table(items))
 
 if __name__ == "__main__":
   main()
