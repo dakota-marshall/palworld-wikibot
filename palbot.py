@@ -5,6 +5,7 @@ from pywikibot import pagegenerators
 from pywikibot.bot import SingleSiteBot
 from src.suitability_parser import get_suitabilities
 from src.partner_skill_parser import get_partner_skills
+from src.item_parser import get_items
 
 class PalworldBot(SingleSiteBot):
   """Main bot class for the Palworld Wiki"""
@@ -35,6 +36,16 @@ class PalworldBot(SingleSiteBot):
     suitability_page.text = suitabilities
     suitability_page.save('Update suitability data')
   
+  def gen_items(self) -> None:
+    """Generate and upload all item data to Module:Items/data.json"""
+    
+    items_page: pywikibot.Page = pywikibot.Page(self.site, "Module:Items/data.json")
+
+    items = json.dumps(get_items(), indent=4)
+
+    items_page.text = items
+    items_page.save('Update suitability data')
+  
 def parse_arguments() -> argparse.Namespace:
 
   # Start the parser
@@ -49,6 +60,9 @@ def parse_arguments() -> argparse.Namespace:
 
   # Partner skills
   partner_skills = subparsers.add_parser('gen_partner_skills', help='Generate and Upload partner skill data')
+
+  # Items
+  items = subparsers.add_parser('gen_items', help='Generate and Upload item data')
 
   # Parse
   args = parser.parse_args()
@@ -71,6 +85,8 @@ def main() -> None:
       bot.gen_suitability_tables()
     case 'gen_partner_skills':
       bot.gen_partner_skills()
+    case 'gen_items':
+      bot.gen_items()
 
 
 if __name__ == "__main__":
