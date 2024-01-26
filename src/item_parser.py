@@ -44,7 +44,10 @@ def get_items() -> list[dict]:
     item.item_type = data['TypeA'].replace('EPalItemTypeA::', '')
     item.weight = data['Weight']
     item.buy_price =  data['Price']
-    item.sell_price = (item.buy_price / 10)
+    if item.buy_price == 1:
+      item.sell_price = 1
+    else:
+      item.sell_price = (item.buy_price / 10)
     #item.consumable = not data['bNotConsumed']
     if item.item_type == "Food" or item.item_type == "Consume":
       item.consumable = not data['bNotConsumed']
@@ -175,7 +178,7 @@ def make_item_table(item_list: dict) -> str:
 def main():
   
   items = get_items()
-  print(make_item_table(items))
+  print(json.dumps(items))
 
 if __name__ == "__main__":
   main()
